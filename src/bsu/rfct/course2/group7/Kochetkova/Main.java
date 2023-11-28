@@ -1,4 +1,4 @@
-package bsu.rfct.course2.group9.Todadze;
+package bsu.rfct.course2.group7.Kochetkova;
 
 import javax.swing.*;
 import java.io.*;

@@ -1,4 +1,4 @@
-package bsu.rfct.course2.group9.Todadze;
+package bsu.rfct.course2.group7.Kochetkova;
 
 import java.awt.BorderLayout;
 import java.awt.Toolkit;

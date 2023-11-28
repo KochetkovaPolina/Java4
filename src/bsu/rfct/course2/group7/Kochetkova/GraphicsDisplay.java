@@ -1,4 +1,4 @@
-package bsu.rfct.course2.group9.Todadze;
+package bsu.rfct.course2.group7.Kochetkova;
 
 import javax.swing.*;
 import java.awt.*;
@@ -8,8 +8,6 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.*;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
