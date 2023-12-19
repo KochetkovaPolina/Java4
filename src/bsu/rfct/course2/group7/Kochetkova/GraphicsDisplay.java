@@ -53,7 +53,7 @@ public class GraphicsDisplay extends JPanel {
         selectionRect = new Rectangle2D.Double();
         setBackground(Color.WHITE);
         BasicStroke dashed = new BasicStroke(3, BasicStroke.CAP_BUTT, BasicStroke.CAP_BUTT,
-                1, new float[]{3,3,3,3,3,3,9,3,6,3,6, 3}, 0);
+                1, new float[]{9,3,9,3,9,3,9,3,9,3,9,3}, 0);
         graphicsStroke = dashed;
         axisStroke = new BasicStroke(2.0f, BasicStroke.CAP_BUTT,
                 BasicStroke.JOIN_MITER, 10.0f, null, 0.0f);
@@ -191,12 +191,12 @@ public class GraphicsDisplay extends JPanel {
                 Point2D.Double center = xyToPoint(point[0], point[1]);
                 Point2D.Double corner = shiftPoint(center, 7, 7);
 
-                int num = Math.abs(point[1].intValue());
-                boolean even = num % 2 == 0;
+                int dec_part = Math.abs(point[1].intValue());
+                boolean is_even = dec_part % 2 == 0;
 
                 canvas.setColor(Color.BLACK);
 
-                if (!even) {
+                if (!is_even) {
                     canvas.setColor(Color.GREEN);
                 }
 
@@ -237,65 +237,63 @@ public class GraphicsDisplay extends JPanel {
     }
 
 
+//
     protected void paintAxis(Graphics2D canvas) {
         canvas.setStroke(axisStroke);
         canvas.setColor(Color.BLACK);
         canvas.setPaint(Color.BLACK);
         canvas.setFont(axisFont);
         FontRenderContext context = canvas.getFontRenderContext();
+
+        // Отрисовка оси y
         if (minX <= 0.0 && maxX >= 0.0) {
-
-
-            canvas.draw(new Line2D.Double(xyToPoint(0, maxY),
-                    xyToPoint(0, minY)));
-
+            canvas.draw(new Line2D.Double(xyToPoint(0, maxY), xyToPoint(0, minY)));
 
             GeneralPath arrow = new GeneralPath();
             Point2D.Double lineEnd = xyToPoint(0, maxY);
 
-
             arrow.moveTo(lineEnd.getX(), lineEnd.getY());
-            arrow.lineTo(arrow.getCurrentPoint().getX() + 5,
-                    arrow.getCurrentPoint().getY() + 20);
-            arrow.lineTo(arrow.getCurrentPoint().getX() - 10,
-                    arrow.getCurrentPoint().getY());
+            arrow.lineTo(arrow.getCurrentPoint().getX() + 5, arrow.getCurrentPoint().getY() + 20);
+            arrow.lineTo(arrow.getCurrentPoint().getX() - 10, arrow.getCurrentPoint().getY());
             arrow.closePath();
             canvas.draw(arrow);
             canvas.fill(arrow);
+
             Rectangle2D bounds = axisFont.getStringBounds("y", context);
             Point2D.Double labelPos = xyToPoint(0, maxY);
 
-
-            canvas.drawString("y", (float) labelPos.getX() + 10,
-                    (float) (labelPos.getY() - bounds.getY()));
-
+            canvas.drawString("y", (float) labelPos.getX() + 10, (float) (labelPos.getY() - bounds.getY()));
         }
-        if (minY <= 0.0 && maxY >= 0.0) {
 
-            canvas.draw(new Line2D.Double(xyToPoint(minX, 0),
-                    xyToPoint(maxX, 0)));
+        // Отрисовка оси x
+        if (minY <= 0.0 && maxY >= 0.0) {
+            canvas.draw(new Line2D.Double(xyToPoint(minX, 0), xyToPoint(maxX, 0)));
+
             GeneralPath arrow = new GeneralPath();
             Point2D.Double lineEnd = xyToPoint(maxX, 0);
 
             arrow.moveTo(lineEnd.getX(), lineEnd.getY());
-            arrow.lineTo(arrow.getCurrentPoint().getX() - 20,
-                    arrow.getCurrentPoint().getY() - 5);
-            arrow.lineTo(arrow.getCurrentPoint().getX(),
-                    arrow.getCurrentPoint().getY() + 10);
+            arrow.lineTo(arrow.getCurrentPoint().getX() - 20, arrow.getCurrentPoint().getY() - 5);
+            arrow.lineTo(arrow.getCurrentPoint().getX(), arrow.getCurrentPoint().getY() + 10);
             arrow.closePath();
             canvas.draw(arrow);
             canvas.fill(arrow);
+
             Rectangle2D bounds = axisFont.getStringBounds("x", context);
             Point2D.Double labelPos = xyToPoint(maxX, 0);
 
+            canvas.drawString("x", (float) (labelPos.getX() - bounds.getWidth() - 10), (float) (labelPos.getY() + bounds.getY()) + 80);
+        }
 
-            canvas.drawString("x", (float) (labelPos.getX() -
-                    bounds.getWidth() - 10), (float) (labelPos.getY() + bounds.getY()) + 80);
-
-
+        // Отрисовка метки "0" в начале координат
+        if (minX <= 0.0 && maxX >= 0.0 && minY <= 0.0 && maxY >= 0.0) {
+            Point2D.Double origin = xyToPoint(1, 0);
+            Rectangle2D bounds = axisFont.getStringBounds("0", context);
+            float x = (float) (origin.getX() - bounds.getWidth() / 2);
+            float y = (float) (origin.getY() + bounds.getHeight());
+            canvas.drawString("0", x, y);
         }
     }
-
 
     protected int findSelectedPoint(int x, int y) {
         if (graphicsData == null) {
